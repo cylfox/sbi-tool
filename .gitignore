@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Binaries (user must provide their own)
+chdman.exe
+discdb.yaml
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
