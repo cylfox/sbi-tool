@@ -12,7 +12,9 @@ Usage:
 Requirements:
     pip install pyyaml requests py7zr
 
-Needs chdman.exe in the same directory (or edit CHDMAN path below).
+Dependencies (auto-downloaded on first run):
+    - chdman.exe (from MAME via namDHC, GPL-2.0+)
+    - discdb.yaml (from DuckStation, CC BY-NC-ND 4.0)
 """
 
 import os
@@ -30,6 +32,42 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CHDMAN = os.path.join(SCRIPT_DIR, "chdman.exe")
 DISCDB = os.path.join(SCRIPT_DIR, "discdb.yaml")
 SBI_BASE_URL = "https://psxdatacenter.com/"
+
+# ── Auto-download URLs ──
+CHDMAN_URL = "https://github.com/umageddon/namDHC/releases/download/v1.13/chdman.exe"
+DISCDB_URL = "https://raw.githubusercontent.com/stenzek/duckstation/master/data/resources/discdb.yaml"
+
+
+def ensure_dependencies():
+    """Download chdman.exe and discdb.yaml if they don't exist."""
+    if not os.path.isfile(CHDMAN):
+        print(f"chdman.exe not found. Downloading from namDHC (MAME)...")
+        try:
+            resp = requests.get(CHDMAN_URL, timeout=60)
+            resp.raise_for_status()
+            with open(CHDMAN, "wb") as f:
+                f.write(resp.content)
+            print(f"  Saved: {CHDMAN} ({len(resp.content) / 1024 / 1024:.1f} MB)")
+        except Exception as e:
+            print(f"  ERROR: Could not download chdman.exe: {e}")
+            print(f"  Please download it manually from: {CHDMAN_URL}")
+            sys.exit(1)
+
+    if not os.path.isfile(DISCDB):
+        print(f"discdb.yaml not found. Downloading from DuckStation...")
+        try:
+            resp = requests.get(DISCDB_URL, timeout=60)
+            resp.raise_for_status()
+            with open(DISCDB, "wb") as f:
+                f.write(resp.content)
+            print(f"  Saved: {DISCDB} ({len(resp.content) / 1024 / 1024:.1f} MB)")
+        except Exception as e:
+            print(f"  ERROR: Could not download discdb.yaml: {e}")
+            print(f"  Please download it manually from: {DISCDB_URL}")
+            sys.exit(1)
+
+    print()
+
 
 # ── SBI database from psxdatacenter.com/sbifiles.html ──
 # Every serial that has a LibCrypt SBI file available, mapped to its download path.
@@ -388,15 +426,7 @@ def main():
         print(f"ERROR: '{chd_dir}' is not a valid directory")
         sys.exit(1)
 
-    if not os.path.isfile(CHDMAN):
-        print(f"ERROR: chdman.exe not found at '{CHDMAN}'")
-        print(f"  Copy chdman.exe to: {SCRIPT_DIR}")
-        sys.exit(1)
-
-    if not os.path.isfile(DISCDB):
-        print(f"ERROR: discdb.yaml not found at '{DISCDB}'")
-        print(f"  Copy discdb.yaml to: {SCRIPT_DIR}")
-        sys.exit(1)
+    ensure_dependencies()
 
     if dry_run:
         print("=" * 70)

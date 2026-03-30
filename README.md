@@ -14,8 +14,8 @@ CHD file → chdman info → track sizes → discdb.yaml lookup → serial numbe
 
 - **Python 3.8+**
 - **Python packages:** `pip install pyyaml requests py7zr`
-- **chdman.exe** — from [MAME](https://www.mamedev.org/release.html) or [namDHC](https://github.com/umageddon/namDHC). Place it in the same directory as the script.
-- **discdb.yaml** — from [DuckStation](https://github.com/stenzek/duckstation) (`resources/discdb.yaml`). Place it in the same directory as the script.
+
+External dependencies (`chdman.exe` and `discdb.yaml`) are **downloaded automatically** on first run.
 
 ## Usage
 
@@ -54,5 +54,5 @@ LibCrypt was a copy protection system used on some PAL PlayStation games. Emulat
 ## Credits
 
 - SBI files sourced from [psxdatacenter.com](https://psxdatacenter.com/sbifiles.html)
-- Disc identification powered by [DuckStation's](https://github.com/stenzek/duckstation) game database
-- CHD metadata read via [MAME's](https://www.mamedev.org/) `chdman`
+- Disc identification powered by [DuckStation's](https://github.com/stenzek/duckstation) game database (CC BY-NC-ND 4.0)
+- CHD metadata read via [MAME's](https://www.mamedev.org/) `chdman` (GPL-2.0+), downloaded from [namDHC](https://github.com/umageddon/namDHC)
